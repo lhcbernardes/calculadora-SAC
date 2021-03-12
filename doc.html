@@ -1,0 +1,181 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Calculadora de juros</title>
+  <style>
+    #header {
+      /*Novamente definimos a largura da div*/
+      width: 100%;
+      /* altura da div */
+      height: 10%;
+    }
+
+    #conteudo {
+      /*Novamente definimos a largura da div*/
+      width: 100%;
+      /* altura da div */
+      height: 500px;
+      /* Cor de fundo da div */
+      display: table;
+      flex-direction: row;
+    }
+
+    #corpo {
+      margin: auto;
+      width: max-content;
+      background-color: white;
+    }
+
+    .card {
+      float: left;
+      width: 20%;
+      padding: 5%;
+    }
+
+    .label {
+      display: table-column;
+    }
+
+    .footer{
+      padding: 5%;
+    }
+
+    .title {
+      margin: auto;
+      padding: 2%;
+      color: #458789;
+    }
+
+    .input {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border-radius: 4px;
+      box-sizing: border-box;
+      display: table-cell
+    }
+
+    .button {
+      clear: both;
+      margin-left: 5%;
+      margin-right: 5%;
+      margin-top: 1%;
+      margin-bottom: 1%;
+      font-size: 18px;
+    }
+
+    .body{
+      background-color: #bedbe3;
+    }
+
+    .buttoncss{
+      font-size: 24px;
+      background-color: #458789;
+      color: white;
+
+    }
+  </style>
+  <script type="text/javascript">
+    function searchURL(){
+      var valor = document.getElementById('valor').value;
+      var juros_Aa = document.getElementById('juros').value;
+      var prazo_Aa = document.getElementById('prazo').value;
+
+      var calc_PM = prazo_Aa * 12;
+      var jurosDiv = 1+(parseFloat(juros_Aa)/100);
+      var calc_JM = Math.pow((1+parseFloat(juros_Aa)), (1.0/12))-1;
+      var amortiza = valor / calc_PM;
+      var tabela = [];
+      var i;
+      var jurosAcumulado = null;
+      
+      for (i = 1; i <= calc_PM; i++) {
+        var total = null;
+        var jurosFinal = null;
+        juros = calc_JM*(valor-((i-1)*amortiza));
+        total = amortiza + calc_JM*(valor-((i-1)*amortiza));
+        
+        jurosAcumulado += juros;
+        tabela[i] = { prestacao: i, amortizacao: amortiza.toFixed(2), juros: juros.toFixed(2), total: total.toFixed(2)};
+      }
+console.log(tabela)
+      var k = '<tbody>'
+      var j;
+      for(j = 1;j <= 5; j++){
+        k+= '<tr>';
+        k+= '<td>' + tabela[j].prestacao + '</td>';
+        k+= '<td>' + tabela[j].amortizacao + '</td>';
+        k+= '<td>' + tabela[j].juros + '</td>';
+        k+= '<td>' + tabela[j].total + '</td>';
+        k+= '</tr>';
+      }
+    k+='</tbody>';
+      document.getElementById('tableData').innerHTML = k;
+      document.getElementById("prazomes").value = calc_PM;
+      document.getElementById("juromes").value = calc_JM.toFixed(15);
+      document.getElementById("jurosacu").value = jurosAcumulado.toFixed(2);
+    }
+  </script>
+</head>
+
+<body class="body">
+  <div id="corpo">
+    <div id="conteudo">
+      <div id="header">
+        <h1 class="title">Simulação de financiamento</h1>
+      </div>
+      <form action="JavaScript:searchURL()">
+        <div class="card">
+          <label for="valor">Valor:</label>
+          <input type="text" id="valor" name="valor" value="200000">
+        </div>
+        <div class="card">
+          <label for="prazo">Prazo (anos):</label>
+          <input type="text" id="prazo" name="prazo" value="20">
+        </div>
+        <div class="card">
+          <label for="juros">Juros ao ano:</label>
+          <input type="number" id="juros" name="juros" value="0.08" step="0.0100">
+        </div>
+        <div class="button">
+          <input type="submit" class="buttoncss" value="Simular">
+        </div>  
+      </form>
+      <div id="footer">
+        <h1 class="title">Resultado</h1>
+        <form action="">
+          <div class="card">
+            <label for="prazomes">Prazo (meses):</label>
+            <input type="text" id="prazomes" name="prazomes" value="">
+          </div>
+          <div class="card">
+            <label for="juromes">Juros ao mês:</label>
+            <input type="text" id="juromes" name="juromes" value="">
+          </div>
+          <div class="card">
+            <label for="jurosacu">Juros acumulados:</label>
+            <input type="number" id="jurosacu" name="jurosacu" value="">
+          </div>
+          <div class="button">
+            <table cellpadding="2" cellspacing="2" border="0" width="50%" align="left">
+              <thead>
+                  <tr>
+                      <th width="1%">Prestação</th>
+                      <th width="25%">Amortização</th>
+                      <th width="18%">Juros</th>
+                      <th width="18%">Total</th>
+                  </tr>
+              </thead>
+                  <tbody id="tableData"></tbody>
+              </table>
+          </div>
+        </form>
+      </div>
+    </div>
+ 
+</body>
+</html>
